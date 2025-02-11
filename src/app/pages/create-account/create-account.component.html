@@ -1,0 +1,31 @@
+<main class="w-full min-h-screen flex flex-col md:flex-row justify-center items-center mx-auto">
+ 
+
+    <form class="flex flex-1 flex-col justify-center items-center" [formGroup]="createNewAccount" (submit)="onSubmit()">
+        <img src="./assets/user.png" alt="logo do usuario" class="w-36 hover:scale-110 duration-300" />
+        <h1 class="text-4xl font-bold mb-7">Criar conta</h1>
+
+        <div class="w-full max-w-xl flex flex-col justify-center items-center gap-2">
+            <label class="w-full font-medium" for="firstName"> Primeiro Nome
+                <input class="w-full p-2 rounded-lg outline-none bg-gray-50" type="text" formControlName="firstName" placeholder="Informe seu primeiro nome" />
+            </label>
+            <label class="w-full font-medium" for="lastName"> Ultimo Nome
+                <input class="w-full p-2 rounded-lg outline-none bg-gray-50" type="text" formControlName="lastName" placeholder="Informe seu ultimo nome"/>
+            </label>
+            <label class="w-full font-medium" for="email"> Email
+                <input class="w-full p-2 rounded-lg outline-none bg-gray-50" type="email" formControlName="email" placeholder="Informe seu email" />
+            </label>
+            <label class="w-full font-medium" for="Username"> Username
+                <input class="w-full p-2 rounded-lg outline-none bg-gray-50" type="text"  formControlName="username" placeholder="Informe seu username"/>
+            </label>
+            <label class="w-full font-medium" for="password"> Senha
+                <input class="w-full p-2 rounded-lg outline-none bg-gray-50" type="password" formControlName="password" placeholder="*********"/>
+            </label>
+            <label class="w-full font-medium" for="passwordConfirm"> Confirme sua Senha
+                <input class="w-full p-2 rounded-lg outline-none bg-gray-50" type="password" formControlName="passwordConfirm" placeholder="*********"/>
+            </label>
+        </div>
+        
+        <button class="w-full max-w-xl bg-blue-600 mt-10 p-2 rounded-lg text-white text-lg font-medium hover:bg-blue-500 duration-500">Criar conta</button>
+    </form>
+</main>

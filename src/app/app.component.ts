@@ -7,7 +7,7 @@ import { LoginComponent } from "./pages/login/login.component";
   standalone: true,
   imports: [RouterOutlet, LoginComponent],
   template: `
-  <app-login></app-login>
+  
   <router-outlet></router-outlet>`
 })
 export class AppComponent {
