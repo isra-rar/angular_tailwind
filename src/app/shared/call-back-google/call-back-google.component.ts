@@ -54,9 +54,8 @@ export class CallBackGoogleComponent implements OnInit, OnDestroy {
   private exchangeCodeForToken(code: string): void {
     this.authService.exchangeCodeForToken(code).pipe(take(1)).subscribe({
       next: (res) => {
-        if (typeof window !== 'undefined') {
-          this.localStorageService.setItem('token', res.token);
-        }
+        this.localStorageService.setItem('token', res.token);
+        
         this.router.navigate(['/home']); 
       },
       error: () => {
