@@ -2,20 +2,23 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../core/services/user.service';
+import { StatePropsService } from '../../core/services/state-props.service';
+import { ButtonGoogleComponent } from '../../components/button-google/button-google.component';
+import { AuthGoogleServicesService } from '../../core/services/auth-google-services.service';
 
 @Component({
   selector: 'app-create-account',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ButtonGoogleComponent],
   templateUrl: './create-account.component.html',
   styleUrl: './create-account.component.scss'
 })
 export class CreateAccountComponent {
 
   showPassword: boolean = false;
-  public createNewAccount!: FormGroup; // Apenas a declaração da variável
+  public createNewAccount!: FormGroup;
 
-  constructor(private fb: FormBuilder, private userService: UserService, private router: Router) {
+  constructor(private fb: FormBuilder, private userService: UserService, private router: Router, private state: StatePropsService, private googleService: AuthGoogleServicesService) {
     this.createNewAccount = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
       lastName: ['', [Validators.required, Validators.minLength(3)]],
@@ -26,8 +29,11 @@ export class CreateAccountComponent {
     });
   }
 
+  changeToLoginMode() {
+    this.state.setLoginMode(true);
+  }
+
   togglePassword() {
-    console.log(this.showPassword)
     this.showPassword = !this.showPassword;
   }
 
@@ -45,5 +51,9 @@ export class CreateAccountComponent {
     } else {
       console.log('Formulário inválido!', this.createNewAccount.errors);
     }
+  }
+
+  loginWithGoogle() {
+    this.googleService.loginWithGoogle();
   }
 }

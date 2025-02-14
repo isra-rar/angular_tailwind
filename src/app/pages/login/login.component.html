@@ -1,17 +1,17 @@
 <main class="w-full min-h-screen flex flex-col md:flex-row justify-center items-center mx-auto">
-    <form class="w-full flex-1 flex flex-col justify-center items-center p-4" 
+    <form *ngIf="isLoginMode" class="w-full flex-1 flex flex-col justify-center items-center p-4" 
     #loginForm="ngForm" (submit)="onSubmit()">
         <div class="w-full max-w-xl flex flex-col justify-center items-center gap-4">
-            <img src="./assets/user.png" alt="logo do usuario" class="w-36 hover:scale-110 duration-300" />
+            <img src="./assets/pngwing.com.png" alt="logo do usuario" class="w-36 hover:scale-110 duration-300" />
 
-            <h1 class="text-4xl font-bold mb-7">Login</h1>
+            <h1 class="text-4xl font-bold mb-7 text-yellow-500">Login</h1>
 
-            <label class="w-full" for="username"> Username
+            <label class="w-full " for="username"> Username
                 <input class="w-full p-2 rounded-lg outline-none bg-gray-50" type="text" name="username"
                     placeholder="Digite seu username..."  [(ngModel)]="credentials.username"/>
             </label>
 
-            <label class="w-full" for="senha"> Senha
+            <label class="w-full " for="senha"> Senha
                 <input class="w-full p-2 rounded-lg outline-none bg-gray-50" type="password" name="senha"
                     placeholder="**********" [(ngModel)]="credentials.password" />
             </label>
@@ -19,23 +19,28 @@
             <div class="w-full flex flex-row items-center justify-between">
                 <div class="flex items-center gap-2">
                     <input type="checkbox" />
-                    <label class="font-medium">Lembrar Senha</label>
+                    <label class="font-medium ">Lembrar Senha</label>
                 </div>
 
-                <a href="#" class="text-sky-600 hover:text-sky-500 duration-200">Esqueceu a senha?</a>
+                <a href="#" class="text-yellow-600 hover:text-yellow-500 duration-200">Esqueceu a senha?</a>
             </div>
 
-            <button class="w-full bg-blue-600 p-2 rounded-lg text-white text-lg font-medium hover:bg-blue-500 duration-500">Acessar</button>
+            <button class="w-full bg-yellow-400 p-2 rounded-lg text-white text-lg font-medium hover:bg-yellow-300 duration-500">Acessar</button>
 
-            <p>Não possui uma conta <a class="font-medium text-sky-600 hover:text-sky-500 duration-200" href="#">Criar uma conta</a></p>
+            <p class="mb-4">Não possui uma conta? <button class="font-medium text-yellow-600 hover:text-yellow-500 duration-200" (click)="toggleModeCreate()">Criar uma conta</button></p>
         </div>
+        
+        <app-button-google class="w-full flex items-center justify-center" (click)="loginWithGoogle()"></app-button-google>
+
     </form>
 
-    <section class="hidden md:flex w-full flex-1 bg-blue-600 h-screen items-center justify-center flex-col gap-8" >
-        <h1 class="text-white text-2xl lg:text-4xl text-center max-w-lg">Domine as <strong>tecnologias mais buscadas</strong> pelo mercado</h1>
+    <app-create-account  class="flex flex-1 flex-col justify-center items-center" *ngIf="!isLoginMode"></app-create-account>
+
+    <section class="hidden md:flex w-full flex-1 bg-yellow-400 h-screen items-center justify-center flex-col gap-8" >
+        <h1 class="text-black text-2xl lg:text-4xl text-center max-w-lg">Facilite a organização da sua <strong>célula</strong> e <strong>envolva todos com praticidade!</strong> </h1>
 
         <img class="w-3/4 lg:w-full lg:max-w-md"  
-        src="./assets/techs.png" 
+        src="./assets/celula.jpg" 
         alt="tecnologias usadas mercado"
         />
     </section>
