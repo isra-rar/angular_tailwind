@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UserService } from '../../core/services/user.service';
 import { StatePropsService } from '../../core/services/state-props.service';
 import { ButtonGoogleComponent } from '../../components/button-google/button-google.component';
-import { AuthGoogleServicesService } from '../../core/services/auth-google-services.service';
+import { AuthGoogleService } from '../../core/services/auth-google-services.service';
 
 @Component({
   selector: 'app-create-account',
@@ -15,10 +15,16 @@ import { AuthGoogleServicesService } from '../../core/services/auth-google-servi
 })
 export class CreateAccountComponent {
 
+  private userService = inject(UserService);
+  private router = inject(Router);
+  private state = inject(StatePropsService);
+  private googleService = inject(AuthGoogleService);
+  private fb = inject(FormBuilder);
+
   showPassword: boolean = false;
   public createNewAccount!: FormGroup;
 
-  constructor(private fb: FormBuilder, private userService: UserService, private router: Router, private state: StatePropsService, private googleService: AuthGoogleServicesService) {
+  constructor() {
     this.createNewAccount = this.fb.group({
       firstName: ['', [Validators.required, Validators.minLength(3)]],
       lastName: ['', [Validators.required, Validators.minLength(3)]],
@@ -39,7 +45,6 @@ export class CreateAccountComponent {
 
   onSubmit() {
     if (this.createNewAccount.valid) {
-      console.log("Formulário válido!", this.createNewAccount.value);
       this.userService.createUser(this.createNewAccount.value).subscribe({
         next: () => {
           this.router.navigate(['/home']);

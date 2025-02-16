@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { LoginRequest } from '../../models/auth.model';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -7,7 +7,8 @@ import { CommonModule, Location } from '@angular/common';
 import { ButtonGoogleComponent } from '../../components/button-google/button-google.component';
 import { CreateAccountComponent } from '../create-account/create-account.component';
 import { StatePropsService } from '../../core/services/state-props.service';
-import { AuthGoogleServicesService } from '../../core/services/auth-google-services.service';
+import { AuthGoogleService } from '../../core/services/auth-google-services.service';
+import { LocalStorageService } from '../../core/services/local-storage.service';
 
 
 @Component({
@@ -19,13 +20,21 @@ import { AuthGoogleServicesService } from '../../core/services/auth-google-servi
 })
 export class LoginComponent implements OnInit {
 
+  private router = inject(Router);
+  private authService = inject(AuthService);
+  private state = inject(StatePropsService);
+  private googleService = inject(AuthGoogleService);
+  private storage = inject(LocalStorageService);
+
   isLoginMode: boolean | undefined;
 
   credentials: LoginRequest = { username: '', password: '' };
 
-  constructor(private router: Router, private authService: AuthService, private state: StatePropsService, private googleService: AuthGoogleServicesService) {}
-
   ngOnInit(): void {
+    if (!!this.storage.getItem('token')) {
+      this.router.navigate(['/home'])
+    }
+    
     this.state.isLoginMode$.subscribe((mode: boolean) => {
       this.isLoginMode = mode;
     });
@@ -37,10 +46,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.authService.login(this.credentials).subscribe({
-      next: (res) => {
-        console.log('res ==> ', res);
-        this.router.navigate(['/home']);
-      },
+      next: () => this.router.navigate(['/home']),
       error: (error) => {
         console.log('error ==> ', error);
       },

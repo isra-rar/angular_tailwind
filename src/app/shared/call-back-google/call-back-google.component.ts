@@ -1,9 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service';
+
 import { CommonModule } from '@angular/common';
-import { first, take } from 'rxjs';
-import { LocalStorageServiceService } from '../../core/services/local-storage-service.service';
+
+import { LocalStorageService } from '../../core/services/local-storage.service';
 
 @Component({
   selector: 'app-call-back-google',
@@ -12,64 +12,26 @@ import { LocalStorageServiceService } from '../../core/services/local-storage-se
   templateUrl: './call-back-google.component.html',
   styleUrl: './call-back-google.component.scss'
 })
-export class CallBackGoogleComponent implements OnInit, OnDestroy {
+export class CallBackGoogleComponent implements OnInit {
 
-  loading: boolean = false;
-  error: string | null = null;
-  private subscription: any;
 
-  constructor(
-    private route: ActivatedRoute,
-    private authService: AuthService,
-    private router: Router,
-    private localStorageService: LocalStorageServiceService
-  ) {}
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private storage = inject(LocalStorageService);
 
-  ngOnInit(): void {
-    this.loading = true;
-    const token = this.localStorageService.getItem('token')
-    if (token) {
-      this.router.navigate(['/home']);
-    } else {
-      this.processQueryParams();
-    }
-  }
+  constructor() {}
 
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
-  }
-
-  private processQueryParams(): void {
-    this.subscription = this.route.queryParams.pipe(first()).subscribe(params => {
-      const code = params['code'];
-
-      if (code) {
-        this.exchangeCodeForToken(code);
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      const token = params['token'];
+      const storedToken = this.storage.getItem('token');
+      
+      if (token && !storedToken) {
+        this.storage.setItem('token', token);
+        this.router.navigate(['/home']);
       } else {
-        this.setErrorAndStopLoading('Código de autenticação não encontrado ou já utilizado');
+        this.router.navigate(['/login']);
       }
     });
-  }
-
-  private exchangeCodeForToken(code: string): void {
-    this.authService.exchangeCodeForToken(code).pipe(take(1)).subscribe({
-      next: (res) => {
-        this.localStorageService.setItem('token', res.token);
-        
-        this.router.navigate(['/home']); 
-      },
-      error: () => {
-        this.setErrorAndStopLoading('Falha ao autenticar. Tente novamente.');
-        this.router.navigate(['/login']); 
-      },
-      complete: () => {
-        this.loading = false;
-      }
-    });
-  }
-
-  private setErrorAndStopLoading(message: string): void {
-    this.error = message;
-    this.loading = false;
   }
 }

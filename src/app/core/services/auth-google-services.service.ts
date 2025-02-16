@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGoogleServicesService {
+export class AuthGoogleService {
 
   private googleAuthUrl: string = 'https://accounts.google.com/o/oauth2/auth';
 
@@ -11,7 +11,7 @@ export class AuthGoogleServicesService {
 
   loginWithGoogle(): void {
     const clientId = '196774121280-1hiicc2ulo073omhv7fddgsj2snp1404.apps.googleusercontent.com';
-    const redirectUri = 'http://localhost:4200/auth/callback';
+    const redirectUri = 'http://localhost:8080/api/auth/google';
     const responseType = 'code';
     const scope = 'openid email profile';
 
