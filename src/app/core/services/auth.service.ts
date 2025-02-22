@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { ApiResponse } from '../../models/api-response.model';
 import { Router } from '@angular/router';
 import { LocalStorageService } from './local-storage.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,6 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
   private storage = inject(LocalStorageService);
-
-  private apiUrl: string = 'http://localhost:8080/api/auth';
 
   // criar um estado baseado no parametro - o parametro é se o existe token no local storage ou nao
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
@@ -29,8 +28,7 @@ export class AuthService {
   }
 
   login(credentials: LoginRequest): Observable<ApiResponse<LoginResponse>> {
-    return this.http.post<ApiResponse<LoginResponse>>(`${this.apiUrl}/login`, credentials).pipe(
-      // tap pega a resposa da requisiçao e já executa algumas coisas caso deseje
+    return this.http.post<ApiResponse<LoginResponse>>(`${environment.api.auth}/login`, credentials).pipe(
       tap((res) => {
         this.storage.setItem('token', res.data.token);
         this.isAuthenticatedSubject.next(true);

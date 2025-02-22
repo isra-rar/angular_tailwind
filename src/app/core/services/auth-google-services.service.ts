@@ -1,23 +1,18 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGoogleService {
 
-  private googleAuthUrl: string = 'https://accounts.google.com/o/oauth2/auth';
-
   constructor() { }
 
   loginWithGoogle(): void {
-    const clientId = '196774121280-1hiicc2ulo073omhv7fddgsj2snp1404.apps.googleusercontent.com';
-    const redirectUri = 'http://localhost:8080/api/auth/google';
-    const responseType = 'code';
-    const scope = 'openid email profile';
 
     // Usando `window.location.assign` para navegar até a URL de autenticação
     window.location.assign(
-      `${this.googleAuthUrl}?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=${responseType}&scope=${scope}`
+      `${environment.googleAuth.authUrl}?client_id=${environment.googleAuth.clientId}&redirect_uri=${environment.googleAuth.redirectUri}&response_type=${environment.googleAuth.responseType}&scope=${environment.googleAuth.scope}`
     );
   }
 }

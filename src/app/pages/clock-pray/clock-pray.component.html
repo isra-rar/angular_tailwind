@@ -1,0 +1,37 @@
+<main class="max-w-5xl mx-auto">
+    <div class="flex flex-col items-center justify-center gap-2">
+        <p class="bg-gray-100 text-gray-800 text-xs font-medium px-3 py-1 rounded-full mt-5">Gerenciamento</p>
+        <p class="text-4xl font-semibold text-gray-900">Controle de Relógios</p>
+    </div>
+    
+    <form class="mt-10 p-6 bg-slate-200 border border-gray-400 shadow-xl rounded-lg min-h-[250px]" 
+        #formClock="ngForm" (ngSubmit)="submitForm(formClock)">
+        <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col">
+              <label for="clockName" class="text-sm font-medium text-gray-700">Nome do Relogio</label>
+              <input name="clockName" type="text" class="mt-1 p-2 border rounded-md" placeholder="Digite o nome do relogio" [(ngModel)]="clockPrayRequest.name">
+            </div>
+          
+            <div class="flex flex-col">
+                <label for="clockType" class="text-sm font-medium text-gray-700">Tipo do Relógio</label>
+                <select name="clockType" class="mt-1 p-2 border rounded-md" [(ngModel)]="clockPrayRequest.clockType">
+                  <option *ngFor="let type of clockTypes" [value]="type">
+                    {{type}}
+                  </option>
+                </select>                
+              </div>
+
+            <div class="flex flex-col col-span-2">
+              <label for="clockDescription" class="text-sm font-medium text-gray-700">Descrição do relogio</label>
+              <input name="clockDescription" type="text" class="mt-1 p-2 border rounded-md" placeholder="Digite a descrição" [(ngModel)]="clockPrayRequest.description">
+            </div>
+        </div>
+
+        <div class="flex justify-center mt-5">
+            <button type="submit" class="px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-md hover:bg-gray-700 transition">
+                Cadastrar Relógio
+            </button>
+        </div>
+    </form>
+    <app-prayclocktable></app-prayclocktable>
+</main>
